@@ -1,0 +1,1 @@
+F:\git\qbms\quickbms.exe -K -d -e -Y -F "*.gdp" unpack_gdp.bms "F:\Games\Battle Mages" unpacked

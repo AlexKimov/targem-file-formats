@@ -1,0 +1,26 @@
+IDString "\x47\x44\x50\x01" 
+
+GoTo 12
+get FILES long
+get TSIZE long
+
+GoTo 36
+comtype zlib
+
+set POS long 0
+
+for i = 0 < FILES
+    get SIZE long
+    GoTo 12 0 SEEk_CUR    
+
+    SavePos A
+    get OFFSET long
+    get FSIZE long 
+    get UNPACKED_SIZE long   
+
+    GoTo 16 0 SEEk_CUR     
+    XMath LENGTH "SIZE - 44"
+    getdstring FNAME LENGTH
+    
+    clog FNAME OFFSET FSIZE UNPACKED_SIZE
+next i
