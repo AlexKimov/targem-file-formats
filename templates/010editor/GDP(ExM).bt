@@ -1,0 +1,102 @@
+//------------------------------------------------
+//--- 010 Editor v12.0.1 Binary Template
+//
+//      File: 
+//   Authors: 
+//   Version: 
+//   Purpose: 
+//  Category: 
+// File Mask: 
+//  ID Bytes: 
+//   History: 
+//------------------------------------------------
+
+char magic[4];
+uint a;
+uint b;
+uint c;
+
+uint d;
+int filenum <comment=unpackU5>;
+local uint num = -filenum - 29782;
+int d;
+int sectionSize <comment=unpackU5>;
+FSkip(12);
+
+struct {
+  int length <comment=unpackLength>;
+  FSkip(8);
+  int b <comment=unpackU1>;
+  FSkip(4);
+  int offset <comment=unpackU2>;
+  int packedSize <comment=unpackU3>;
+  int unpackedSize <comment=unpackU4>;
+  FSkip(20);
+  char name0[-length - 53];
+
+} files[num - 1]<optimize=false>;
+
+
+string unpackLength( int &data )
+{
+  local string res;
+  local uint l;
+  l = -data - 53;
+  SPrintf(res, "%d (%X)", l, l);
+  return res;
+} 
+
+string unpackU1( int &data )
+{
+  local string res;
+  local int l;
+  l = (data << 24) % 0xFF ;
+  SPrintf(res, "%d (%X)", l, l);
+  return res;
+} 
+
+string unpackU2( int &data )
+{
+  local string res;
+  local int l;
+  l = data - 9568;
+  SPrintf(res, "%d (%X)", l, l);
+  return res;
+} 
+
+string unpackU3( int &data )
+{
+  local string res;
+  local int l;
+  l = -data - 9569;
+  SPrintf(res, "%d (%X)", l, l);
+  return res;
+} 
+
+string unpackU4( int &data )
+{
+  local string res;
+  local int l;
+  l = data - 29782;
+  SPrintf(res, "%d (%X)", l, l);
+  return res;
+} 
+
+string unpackU5( int &data )
+{
+  local string res;
+  local int l;
+  l = -data - 29782;
+  SPrintf(res, "%d (%X)", l, l);
+  return res;
+} 
+
+
+local uint i;
+
+for (i = 0; i < num - 1;++i) {
+  FSeek(files[i].offset - 9568);
+  struct {
+    byte file[-files[i].packedSize- 9569];
+  } F;
+}
