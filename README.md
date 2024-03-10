@@ -4,8 +4,8 @@
 
  № | Формат файла       | Шаблон (010Editor)     |    Описание |
 | :--- | :--------- | :----------- | :---------- |
-| 1 | .gdp        | [GDP.bt](https://github.com/AlexKimov/targem-file-formats/blob/master/formats/010editor/GDP.bt)  |   архив игровых ресурсов Магии Войны Тень Повелителя и других |
-| 2 | .sam        | [GDP.bt](https://github.com/AlexKimov/targem-file-formats/blob/master/formats/010editor/SAM.bt)  |   3d модели и анимация Магии Войны Тень Повелителя и других |
+| 1 | .gdp        | [GDP.bt](https://github.com/AlexKimov/targem-file-formats/blob/master/templates/010editor/GDP.bt)  |   архив игровых ресурсов Магии Войны Тень Повелителя и других |
+| 2 | .sam        | [SAM.bt](https://github.com/AlexKimov/targem-file-formats/blob/master/templates/010editor/SAM.bt)  |   3d модели и анимация Магии Войны Тень Повелителя и других |
 
 **Инструменты**
 
