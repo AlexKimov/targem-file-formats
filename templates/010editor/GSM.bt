@@ -1,0 +1,81 @@
+//------------------------------------------------
+//--- 010 Editor v12.0.1 Binary Template
+//
+//      File: 
+//   Authors: 
+//   Version: 
+//   Purpose: 
+//  Category: 
+// File Mask: 
+//  ID Bytes: 
+//   History: 
+//------------------------------------------------
+
+//------------------------------------------------
+//--- 010 Editor v12.0.1 Binary Template
+//
+//      File: 
+//   Authors: 
+//   Version: 
+//   Purpose: 
+//  Category: 
+// File Mask: 
+//  ID Bytes: 
+//   History: 
+//------------------------------------------------
+
+struct vector_2f {
+    float X;
+    float Y;
+};
+
+struct vector_3f {
+    float X;
+    float Y;
+    float Z;
+};
+
+struct vector_3ush {
+    uint16 X;
+    uint16 Y;
+    uint16 Z;
+};
+
+
+byte header[32];
+uint sectionSize;
+uint sectionOffset;
+uint unk;
+uint unk;
+uint sectionSize;
+uint sectionOffset;
+
+uint unk;
+uint unk;
+uint SectionOffset;
+uint SectionSize;
+
+uint unk;
+uint unk;
+uint sectionSize;
+uint sectionOffset;
+
+uint unk;
+
+char a[4];
+uint unk;
+uint vnum;
+uint fnum;
+byte a;
+
+char name1[131];
+
+struct {
+  vector_3f coordinates;
+  vector_3f normal;
+  vector_2f uv;
+} vertex[vnum]<optimize=false>;
+
+struct {
+  vector_3ush indexes;
+} faces[fnum];
