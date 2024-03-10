@@ -4,9 +4,10 @@
 
  № | Формат файла       | Шаблон (010Editor)     |    Описание |
 | :--- | :--------- | :----------- | :---------- |
-| 1 | .gdp        | [GDP.bt](https://github.com/AlexKimov/targem-file-formats/blob/master/templates/010editor/GDP.bt)  |   архив игровых ресурсов Магии Войны Тень Повелителя и других |
-| 2 | .sam        | [SAM.bt](https://github.com/AlexKimov/targem-file-formats/blob/master/templates/010editor/SAM.bt)  |   3d модели и анимация Магии Войны Тень Повелителя и других |
-| 3 | .gsm        | [GSM.bt](https://github.com/AlexKimov/targem-file-formats/blob/master/templates/010editor/GSM.bt)  |   3d модели без анимации Магии Войны Тень Повелителя и других |
+| 1 | .gdp        | [GDP.bt](https://github.com/AlexKimov/targem-file-formats/blob/master/templates/010editor/GDP.bt)  |   архив игровых ресурсов Магии Войны |
+| 2 | .sam        | [SAM.bt](https://github.com/AlexKimov/targem-file-formats/blob/master/templates/010editor/SAM.bt)  |   3d модели и анимация Магии Войны |
+| 3 | .gsm        | [GSM.bt](https://github.com/AlexKimov/targem-file-formats/blob/master/templates/010editor/GSM.bt)  |   3d модели без анимации Магии Войны |
+| 4 | .gdp        | [GDP(ExM).bt](https://github.com/AlexKimov/targem-file-formats/blob/master/templates/010editor/GDP(ExM).bt)  |   архив игровых ресурсов ExMashina |
 
 **Инструменты**
 
