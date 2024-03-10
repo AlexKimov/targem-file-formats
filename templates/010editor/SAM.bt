@@ -1,0 +1,126 @@
+//------------------------------------------------
+//--- 010 Editor v12.0.1 Binary Template
+//
+//      File: 
+//   Authors: 
+//   Version: 
+//   Purpose: 
+//  Category: 
+// File Mask: 
+//  ID Bytes: 
+//   History: 
+//------------------------------------------------
+
+struct vector_2f {
+    float X;
+    float Y;
+};
+
+struct vector_3f {
+    float X;
+    float Y;
+    float Z;
+};
+
+struct vector_4f {
+    float X;
+    float Y;
+    float Z;
+    float w;
+};
+
+struct vector_3ush {
+    uint16 X;
+    uint16 Y;
+    uint16 Z;
+};
+
+
+byte header[32];
+uint sectionSize;
+uint sectionOffset;
+uint unk;
+uint unk;
+uint sectionSize;
+uint sectionOffset;
+
+uint unk;
+uint unk;
+uint animationsSectionOffset;
+uint animationsSectionSize;
+
+
+uint unk;
+uint unk;
+uint sectionSize;
+uint sectionOffset;
+uint unk;
+uint unk;
+uint sectionSize;
+uint sectionOffset;
+uint unk;
+uint16 boneCount;
+uint16 num01;
+uint16 unk;
+uint16 nu;
+uint16 unk;
+
+uint16 animnum;
+char name[40];
+
+struct {
+  char name0[40];
+  int16 index1;
+  int16 index12;
+  vector_3f pos;
+  vector_4f orientation;
+} bones[boneCount];
+
+struct {
+  char name0[40];
+  uint16 vnum;
+  uint16 facenum;
+  uint16 unk1;
+  uint16 unk2;
+  struct {
+    vector_3f coordinates;
+    vector_3f normal;
+    vector_2f uv;
+    if (unk2 == 2) 
+    {
+      uint16 num; 
+      struct {
+        uint16 index; // ???
+`       float weight; // ??       
+      } weight[num];
+    }
+  } vertex[vnum]<optimize=false>;
+
+  struct {
+    vector_3ush indexes;
+  } faces[facenum];
+} objects[boneCount - num01] <optimize=false>;
+
+uint16 bnum;
+
+struct {
+    uint16 framenum;
+    uint16 unk1;
+    uint16 unk2;
+    uint16 index;
+    char name6[27];
+
+      struct {
+        uint unk1;
+        uint16 unk2;
+        uint16 unk3;   
+      } unknwn[unk2]; 
+
+    struct {
+      struct {
+        vector_3f pos;
+        vector_4f orientation;
+        uint16 index;
+      } bonepos[bnum];
+    } frame[framenum] <optimize=false>;
+ } animation[animnum] <optimize=false>;
