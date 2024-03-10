@@ -13,4 +13,5 @@
 
 | № | Плагин       | Программа | Описание |  
 | :--- | :--------- | :----------- | :---- | 
-| 1 | [unpack_gdp.bms](https://github.com/AlexKimov/targem-file-formats/blob/master/scripts/quickbms/unpack_gdp.bms) | Quickbms | Распаковка файлов ресурсов .gdp Магии Войны Тень Повелителя и других |
+| 1 | [unpack_gdp.bms](https://github.com/AlexKimov/targem-file-formats/blob/master/scripts/quickbms/unpack_gdp.bms) | Quickbms | Распаковка файлов ресурсов .gdp Магии Войны  |
+| 2 | [unpack_gdp_exm.bms](https://github.com/AlexKimov/targem-file-formats/blob/master/scripts/quickbms/exm/unpack_gdp_exm.bms) | Quickbms | Распаковка файлов ресурсов .gdp ExMachina |
