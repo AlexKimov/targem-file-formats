@@ -1,0 +1,27 @@
+IDString "\x50\x4B\x04\x00" 
+
+GoTo 20
+get files long
+xmath num "-files - 29783"
+
+GoTo 44
+comtype zlib
+
+for i = 0 < num
+    get len long
+    xmath length "-len - 53" 
+    
+    GoTo 16 0 SEEk_CUR
+    
+    get offs long
+    xmath offset "offs - 9568"  
+    get fs long
+    xmath fsize "-fs - 9569" 
+    get unfsize long
+    xmath unpacked_fsize "unfsize - 29782"
+
+    GoTo 20 0 SEEk_CUR
+
+    getdstring fname length
+    clog fname offset fsize unpacked_fsize
+next i

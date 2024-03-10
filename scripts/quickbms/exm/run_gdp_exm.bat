@@ -1,0 +1,1 @@
+F:\git\qbms\quickbms.exe -K -d -e -Y -F "*.gdp" unpack_gdp_exm.bms "F:\Games\Buka\Ex Machina\data" unpacked
