@@ -17,15 +17,15 @@ struct vector_2f {
 };
 
 struct vector_3f {
-    float X;
-    float Y;
-    float Z;
+    float x;
+    float y;
+    float z;
 };
 
 struct vector_4f {
-    float X;
-    float Y;
-    float Z;
+    float x;
+    float y;
+    float z;
     float w;
 };
 
@@ -37,12 +37,12 @@ struct vector_3ush {
 
 
 byte header[32];
-uint sectionSize;
-uint sectionOffset;
+uint sectionOffsetBones;
+uint size;
 uint unk;
 uint unk;
 uint sectionSize;
-uint sectionOffset;
+uint sectionOffsetObjects;
 
 uint unk;
 uint unk;
@@ -70,8 +70,8 @@ char name[40];
 
 struct {
   char name0[40];
-  int16 index1;
-  int16 index12;
+  int16 index;
+  int16 indexParent;
   vector_3f pos;
   vector_4f orientation;
 } bones[boneCount];
@@ -90,8 +90,8 @@ struct {
     {
       uint16 num; 
       struct {
-        uint16 index; // ???
-`       float weight; // ??       
+        uint16 index; 
+`       float weight;
       } weight[num];
     }
   } vertex[vnum]<optimize=false>;
@@ -101,26 +101,28 @@ struct {
   } faces[facenum];
 } objects[boneCount - num01] <optimize=false>;
 
-uint16 bnum;
-
 struct {
+    uint16 bnum;
     uint16 framenum;
     uint16 unk1;
     uint16 unk2;
     uint16 index;
-    char name6[27];
+    char name6[25];
 
       struct {
-        uint unk1;
-        uint16 unk2;
-        uint16 unk3;   
+        int16 index;
+        int16 unk;
+        int16 index;
+        int16 unk3;   
       } unknwn[unk2]; 
 
     struct {
       struct {
+        local uint a = ReadShort(FTell());
+        uint16 index00;
         vector_3f pos;
         vector_4f orientation;
-        uint16 index;
-      } bonepos[bnum];
+      } bonepos[bnum] <optimize=false>;
+
     } frame[framenum] <optimize=false>;
  } animation[animnum] <optimize=false>;

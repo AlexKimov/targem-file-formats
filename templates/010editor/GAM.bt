@@ -1,0 +1,166 @@
+//------------------------------------------------
+//--- 010 Editor v12.0.1 Binary Template
+//
+//      File: 
+//   Authors: 
+//   Version: 
+//   Purpose: 
+//  Category: 
+// File Mask: 
+//  ID Bytes: 
+//   History: 
+//------------------------------------------------
+
+struct vector_2f {
+    float X;
+    float Y;
+};
+
+struct vector_3f {
+    float X;
+    float Y;
+    float Z;
+};
+
+struct vector_4f {
+    float X;
+    float Y;
+    float Z;
+    float w;
+};
+
+struct vector_3ush {
+    uint16 X;
+    uint16 Y;
+    uint16 Z;
+};
+
+
+byte header[32];
+uint sectionSize;
+uint sectionOffset;
+uint unk;
+uint unk;
+uint sectionSize;
+uint sectionOffset;
+
+uint unk;
+uint unk;
+uint animationsSectionOffset;
+uint animationsSectionSize;
+
+
+uint unk;
+uint unk;
+uint sectionSize;
+uint sectionOffset;
+uint unk;
+uint unk;
+uint sectionSize;
+uint sectionOffset;
+uint unk;
+uint16 unk;
+uint16 num01;
+uint16 unk;
+uint16 nu;
+uint16 unk;
+
+uint16 animnum;
+
+uint unk;
+uint unk;
+uint sectionSize;
+uint sectionOffset;
+
+uint unk;
+uint objnum;
+uint16 unk;
+uint16 animNum;
+uint16 unk;
+uint16 boneNum;
+
+uint unk;
+if (!unk) {
+  uint a;
+  uint a;
+  uint a;
+  uint a;
+  uint16 objnum;
+  uint16 a;
+  uint16 a;
+  uint16 animNum;
+  uint16 a;
+  uint16 boneNum;
+  uint a;
+}
+
+struct {
+  char name[40];
+  float a[24];
+} bones[boneNum];
+
+struct {
+  char name0[40];
+  uint vv;
+   
+  uint16 f;
+  uint16 index;
+  uint16 unk2;
+  uint16 unk1;
+  uint16 unk2;
+  uint16 unk2;
+  uint e;
+  uint facenum;
+  uint vnum;
+  uint facenum;
+  struct {
+    vector_3f coordinates;
+    vector_3f normal;
+    vector_2f uv;
+    if (e != 32)
+    float e[4];    
+
+  } vertex[vnum*(2)]<optimize=false>;
+
+  struct {
+    vector_3ush indexes;
+  } faces[facenum];
+  
+} mesh[objnum] <optimize=false>;
+
+float t[6];
+
+struct {
+    char name6[25];
+    uint16 animnum;
+    uint16 unk0;
+    uint16 unk1;
+    uint16 unk2;
+    uint16 inde00;
+    uint16 index2;
+    uint16 index;
+
+    if (index2 == 5)
+    uint16 a[4];
+    struct {
+      struct {
+        uint16 index;
+        float a[7];
+      } bonepos[inde00];
+    } frame[animnum] <optimize=false>;
+    
+ } animation[animNum] <optimize=false>;
+
+uint num3; 
+struct {
+  float a[17];
+  uint num;
+  struct {
+    char name[76];
+    uint n[6];
+  } frame[num];
+
+  char name4[44];
+  uint num;
+} MAT[num3] <optimize=false>;
+
