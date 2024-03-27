@@ -14,5 +14,5 @@
 byte data[12];
 uint16 width;
 uint16 height;
-uint16 unknown;
-byte image[width*height*4];
+uint16 format;
+byte image[width*height*((format & 0xFF) >> 3)];
