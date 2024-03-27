@@ -1,6 +1,8 @@
 from inc_noesis import *
 
+
 ANIM_EVAL_FRAMERATE = 20.0
+
 
 def registerNoesisTypes():
     handle = noesis.register( \
@@ -115,6 +117,7 @@ class BMsVertexWeight:
 class BMsModelMesh:
     def __init__(self, reader):
         self.reader = reader
+        self.boneIndex = 0
         self.name = ""
         self.vertexes = []        
         self.faces = []              
@@ -150,12 +153,13 @@ class BMsModelBone:
         self.pos = Vector3F(self.reader)
         self.rot = Vector4F(self.reader)
         self.parentIndex = 0
+        self.index = 0
         self.transMatrix = NoeMat43()
         self.name = ""
         
     def read(self):
-        self.name = self.reader.readBytes(40).split(b"\x00")[0].decode("ascii")  
-        self.index = self.reader.readUShort()        
+        self.name = self.reader.readBytes(40).split(b"\x00")[0].decode("ascii")                   
+        self.index = self.reader.readUShort()         
         self.parentIndex = self.reader.readShort()
 
         self.pos.read()
@@ -177,48 +181,53 @@ class BMsAnimationBonePose:
         self.index = 0
         
     def read(self):
+        self.index = self.reader.readUShort()      
         self.pos.read()
         self.orientation.read() 
-        self.index = self.reader.readUShort()  
+ 
+    def __repr__(self):
+        return repr((self.pos.getStorage(), self.orientation.getStorage()))
         
         
 class BMsAnimationFrame:
-    def __init__(self, reader, num):
+    def __init__(self, reader, num, unk):
+        self.n = unk
         self.reader = reader    
         self.num =  num
-        self.bposes = []
+        self.bposes = {}
         
     def read(self):
         for i in range(self.num):
             bpos = BMsAnimationBonePose(self.reader)
             bpos.read()
-            self.bposes.append(bpos)        
-         
-    
+            self.bposes[bpos.index] = bpos
+
 class BMsAnimation:
-    def __init__(self, reader, boneNum):
+    def __init__(self, reader):
         self.reader = reader
-        self.boneNum = boneNum
         self.frameNum = 0
-        self.unk1 = 0
-        self.unk2 = 0
+        self.boneIndexes = []
         self.name = ""
         self.frames = []
         
-    def readHeader(self):  
+    def readHeader(self): 
+        self.boneNum = self.reader.readUShort()             
         self.frameNum = self.reader.readUShort() 
         self.size = self.reader.readUShort() 
-        self.unk = self.reader.readUShort() 
+        self.boneIndexNum = self.reader.readUShort() 
         self.index = self.reader.readUShort() 
-        self.name = self.reader.readBytes(27).split(b"\x00")[0].decode("ascii") 
+        self.name = self.reader.readBytes(25).split(b"\x00")[0].decode("ascii") 
         
-        self.reader.seek(self.unk * 8, NOESEEK_REL)   
+        for i in range(self.boneIndexNum):
+            boneIndex = self.reader.readUShort() 
+            self.boneIndexes.append(boneIndex)
+            self.reader.seek(6, NOESEEK_REL)
         
     def readFrames(self):  
         for i in range(self.frameNum):
-            frame = BMsAnimationFrame(self.reader, self.boneNum)
+            frame = BMsAnimationFrame(self.reader, self.boneNum, self.boneIndexNum)
             frame.read()
-            self.frames.append(frame)            
+            self.frames.append(frame)       
             
     def read(self):
         self.readHeader()
@@ -256,21 +265,27 @@ class BMsModel:
         for i in range(self.boneNum):
             bone = BMsModelBone(self.reader)
             bone.read()
-            self.bones.append(bone)
+            self.bones.append(bone)           
             
-    def readAnimations(self):
-        self.bNum = self.reader.readUShort() 
+    def readAnimations(self):      
         for i in range(self.animationNum):
-            animation = BMsAnimation(self.reader, self.bNum)
+            animation = BMsAnimation(self.reader)
             animation.read()
-            self.animations.append(animation)        
-        
+            self.animations.append(animation) 
+             
+    def getMeshBoneIndexByName(self):           
+        meshNames = [mesh.name for mesh in self.meshes]        
+        for index, bn in enumerate(self.bones):            
+            for i, msname in enumerate(meshNames):
+                if bn.name == msname:
+                    self.meshes[i].boneIndex = index    
+             
     def read(self):
         self.readHeader()
         self.readBones()
         self.readMeshes()
         self.readAnimations()
-     
+        self.getMeshBoneIndexByName()       
         
 def bmsModelCheckType(data):
 
@@ -278,7 +293,7 @@ def bmsModelCheckType(data):
     
 
 def bmsModelLoadModel(data, mdlList):
-    #noesis.logPopup()
+    noesis.logPopup()
     model = BMsModel(NoeBitStream(data))
     model.read()
     
@@ -301,7 +316,9 @@ def bmsModelLoadModel(data, mdlList):
 
                     rapi.immBoneIndex(indexes)
                     rapi.immBoneWeight(weights)
-                    
+                else:    
+                    rapi.immBoneIndex([msh.boneIndex])
+                    rapi.immBoneWeight([1])                     
                 rapi.immVertex3(msh.vertexes[vIndex].pos.getStorage())      
         
             rapi.immEnd()     
@@ -324,35 +341,40 @@ def bmsModelLoadModel(data, mdlList):
       
             bones.append(NoeBone(bone.index, boneName, boneMat, "", -1))
 
-    kfBones = []
     anims = []
-    frameToTime = 1.0 / ANIM_EVAL_FRAMERATE
-    for animation in model.animations:        
-        for bone in bones: 
-            keyFramedBone = NoeKeyFramedBone(bone.index)
-            rkeys = []
-            pkeys = []   
-                              
-            boneFramePoses = [frame.bposes[bone.index] for frame in animation.frames]
-            
-            for index, bfp in enumerate(boneFramePoses):                           
-                rkeys.append(NoeKeyFramedValue(index * frameToTime, NoeQuat(bfp.orientation.getStorage())))           
-                pkeys.append(NoeKeyFramedValue(index * frameToTime, NoeVec3(bfp.pos.getStorage())))
-            
-            keyFramedBone.setRotation(rkeys)          
-            keyFramedBone.setTranslation(pkeys)
     
-            kfBones.append(keyFramedBone)   
+    # some animations disable some bones to implement nonkeyframed animation (based on physic engine) for objects connected with bones
+    if model.animations:   
+        frameToTime = 1.0 / ANIM_EVAL_FRAMERATE
 
-        anims.append(NoeKeyFramedAnim(animation.name, bones, kfBones) )    
-        break
-           
+        for animation in model.animations: 
+            kfBones = []    
+            try:  
+                for bone in bones:                              
+                    boneFramePoses = [frame.bposes[bone.index] for frame in animation.frames]
+                    
+                    keyFramedBone = NoeKeyFramedBone(bone.index)
+                    rkeys = []
+                    pkeys = []
+                    for index, bfp in enumerate(boneFramePoses):                                     
+                        rkeys.append(NoeKeyFramedValue(index * frameToTime, NoeQuat(bfp.orientation.getStorage())))           
+                        pkeys.append(NoeKeyFramedValue(index * frameToTime, NoeVec3(bfp.pos.getStorage())))
+        
+                    keyFramedBone.setRotation(rkeys)          
+                    keyFramedBone.setTranslation(pkeys)
+
+                    kfBones.append(keyFramedBone)   
+                    
+                anims.append(NoeKeyFramedAnim(animation.name, bones, kfBones) )    
+            except:
+                pass          
+ 
     mdl = rapi.rpgConstructModelSlim() 
     mdl.setAnims(anims)  
     mdl.setBones(bones)
     mdlList.append(mdl)
     
     rapi.setPreviewOption("setAngOfs", "0 -90 0")
-    rapi.setPreviewOption("setAnimSpeed", "30.0")
+    rapi.setPreviewOption("setAnimSpeed", "20.0")
 	
     return 1        
