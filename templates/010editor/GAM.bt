@@ -11,6 +11,50 @@
 //   History: 
 //------------------------------------------------
 
+enum <uint> VertexType { 
+  pos_type = 0,
+  pos_uv_type = 1,
+  pos_color_type = 2,
+  posxyzw_color_type = 3,
+  posxyzw_color_uv_type = 4,
+  pos_normal_color_type = 5,
+  pos_color_uv_type = 6,
+  pos_normal_uv_type = 7,
+  pos_normal_color_uv_type = 8,
+  pos_normal_color_uv_uv1_type = 9,
+  pos_normal_uv_uv1_type = 10,
+  pos_normal_uv_uv1_uv2_type= 11,
+  pos_color_uvw_type = 12,
+  pos_color_uvw_uv_type = 13,
+  pos_color_uv_uv1_type = 14,
+  pos_normal_uv_tangent_type = 15,
+  pos_normal_color_uv_tangent_type = 16,  
+};
+
+enum <uint> SectionType { 
+  objects_num_section = 1,
+  bones_section = 2,
+  meshes_section = 4,
+  collisions_section = 7,
+  animations_section = 8,
+  materials_section = 15,
+  convex_section = 16,
+  geom_section = 64,
+  boundbox_section = 128,
+  groups_section = 240,
+  tag_section = 61441,
+  version_section = 61442,
+  parser_section = 61443,
+  sign_section = 61444
+};
+
+enum <uint> MeshType { 
+  animated_type = 1,
+  collider_type = 2,
+  convex_type = 4 
+};
+
+
 struct vector_2f {
     float X;
     float Y;
@@ -29,138 +73,228 @@ struct vector_4f {
     float w;
 };
 
+struct vector_4b {
+    ubyte r;
+    ubyte g;
+    ubyte b;
+    ubyte a;
+};
+
 struct vector_3ush {
     uint16 X;
     uint16 Y;
     uint16 Z;
 };
 
+struct matrix_4x4 {
+    vector_4f x;
+    vector_4f y;
+    vector_4f z;
+    vector_4f pos;
+};
 
-byte header[32];
-uint sectionSize;
-uint sectionOffset;
-uint unk;
-uint unk;
-uint sectionSize;
-uint sectionOffset;
+struct vertex (uint type) {
+  switch (type)
+  {
+    case pos_type:
+      vector_3f coordinates;
+    break;
+    case pos_uv_type:
+      vector_3f coordinates;
+      vector_2f uv;
+    break;
+    case pos_color_type:
+      vector_3f coordinates;
+      vector_4b color;
+    break;
+    case posxyzw_color_type:
+      vector_4f coordinates;
+      vector_4b color;
+    break;
+    case posxyzw_color_uv_type:
+      vector_4f coordinates;
+      vector_4b color;
+      vector_2f uv;
+    break;
+    case pos_normal_color_type:
+      vector_3f coordinates;
+      vector_3f normal;
+      vector_4b color;
+    break;
+    case pos_color_uv_type:
+      vector_3f coordinates;
+      vector_4b color;
+      vector_2f uv;
+    break;
+    case pos_normal_uv_type:
+      vector_3f coordinates;
+      vector_3f normal;
+      vector_2f uv;
+    break;
+    case pos_normal_color_uv_type:
+      vector_3f coordinates;
+      vector_3f normal;
+      vector_4b color;
+      vector_2f uv;
+    break;
+    case pos_normal_color_uv_uv1_type:
+      vector_3f coordinates;
+      vector_3f normal;
+      vector_4b color;
+      vector_2f uv;
+      vector_2f uv1;
+    break;
+    case pos_normal_uv_uv1_type:
+      vector_3f coordinates;
+      vector_3f normal;
+      vector_2f uv;
+      vector_2f uv1;
+    break;
+    case pos_normal_uv_uv1_uv2_type:
+      vector_3f coordinates;
+      vector_3f normal;
+      vector_2f uv;
+      vector_2f uv1;
+      vector_2f uv2;
+    break;
+    case pos_color_uvw_type:
+      vector_3f coordinates;
+      vector_4b color;
+      vector_3f uvw;
+    break;
+    case pos_color_uvw_uv_type:
+      vector_3f coordinates;
+      vector_4b color;
+      vector_3f uvw;
+      vector_2f uv;
+    break;
+    case pos_color_uv_uv1_type:
+      vector_3f coordinates;
+      vector_4b color;
+      vector_2f uv;
+      vector_2f uv1;
+    break;
+    case pos_normal_uv_tangent_type:
+      vector_3f coordinates;
+      vector_3f normal;
+      vector_2f uv;
+      vector_4f tangent;
+    break;
+    case pos_normal_color_uv_tangent_type:
+      vector_3f coordinates;
+      vector_3f normal;
+      vector_4b color;
+      vector_2f uv0;
+      vector_4f tangent;
+    break;
+  };
+};
 
-uint unk;
-uint unk;
-uint animationsSectionOffset;
-uint animationsSectionSize;
+struct header {
+  SectionType type;
+  uint size;
+  uint64 offset;
+};
 
+char magic[8];
+uint sectionNum;
+header headers[sectionNum];
 
-uint unk;
-uint unk;
-uint sectionSize;
-uint sectionOffset;
-uint unk;
-uint unk;
-uint sectionSize;
-uint sectionOffset;
-uint unk;
-uint16 unk;
-uint16 num01;
-uint16 unk;
-uint16 nu;
-uint16 unk;
-
-uint16 animnum;
-
-uint unk;
-uint unk;
-uint sectionSize;
-uint sectionOffset;
-
-uint unk;
-uint objnum;
-uint16 unk;
+uint16 animatedMeshNum;
+uint16 skinnedMeshNum;
+uint16 staticMeshNum;
 uint16 animNum;
-uint16 unk;
+uint16 matNum;
 uint16 boneNum;
-
-uint unk;
-if (!unk) {
-  uint a;
-  uint a;
-  uint a;
-  uint a;
-  uint16 objnum;
-  uint16 a;
-  uint16 a;
-  uint16 animNum;
-  uint16 a;
-  uint16 boneNum;
-  uint a;
-}
+uint config; // ??
 
 struct {
   char name[40];
-  float a[24];
+  int parentIndex;
+  vector_3f pos;
+  vector_4f orientation;
+  matrix_4x4 matrix;
 } bones[boneNum];
 
-struct {
-  char name0[40];
-  uint vv;
-   
-  uint16 f;
-  uint16 index;
-  uint16 unk2;
-  uint16 unk1;
-  uint16 unk2;
-  uint16 unk2;
-  uint e;
-  uint facenum;
-  uint vnum;
-  uint facenum;
-  struct {
-    vector_3f coordinates;
-    vector_3f normal;
-    vector_2f uv;
-    if (e != 32)
-    float e[4];    
+local uint k;
 
-  } vertex[vnum*(2)]<optimize=false>;
+struct mesh {
+  char name[40];
+  MeshType type;   
+  uint boneIndex;
+  uint matGroupIndex;
+  uint matIndex;
+  uint size;
+  VertexType vertexType;
+  uint vertexNum;
+  uint faceNum;
+
+  vertex vertices(vertexType)[vertexNum] <optimize=false>;
+  if (type == animated_type) 
+    vertex doubleVertices(vertexType)[vertexNum] <optimize=false>;
+
+  if (type == collider_type)
+    struct {  
+      int16 num;
+      struct {
+        uint16 index;
+        float weight;
+        vector_3f offset;
+        vector_3f normal;
+      } influence[4];
+    } influences[vertexNum];
 
   struct {
     vector_3ush indexes;
-  } faces[facenum];
-  
-} mesh[objnum] <optimize=false>;
+  } faces[faceNum];  
+};
 
-float t[6];
+mesh animatedMeshes[animatedMeshNum] <optimize=false>;
+mesh skinnedMeshes[skinnedMeshNum] <optimize=false>;
+mesh staticMeshes[staticMeshNum] <optimize=false>;
+
+float bounds[6];
 
 struct {
-    char name6[25];
-    uint16 animnum;
-    uint16 unk0;
-    uint16 unk1;
-    uint16 unk2;
-    uint16 inde00;
-    uint16 index2;
-    uint16 index;
+    char name[25];
+    uint16 frameNum;
+    uint16 fps;
+    uint16 next;
+    uint16 changeNum;
+    uint16 keyNum;
+    uint action;
 
-    if (index2 == 5)
-    uint16 a[4];
+    struct {
+      uint16 current;
+      uint type;
+      uint16 new;
+   } change[changeNum];    
+
     struct {
       struct {
-        uint16 index;
-        float a[7];
-      } bonepos[inde00];
-    } frame[animnum] <optimize=false>;
-    
- } animation[animNum] <optimize=false>;
+        int16 index;
+        vector_3f pos;
+        vector_4f orientation;
+      } key[keyNum];
+    } frame[frameNum] <optimize=false>;   
+} animatiomn[animNum] <optimize=false>;
 
-uint num3; 
+uint grNum; 
+
 struct {
-  float a[17];
+  vector_4f diffuse;
+  vector_4f ambient;
+  vector_4f specular;
+  vector_4f emmisive;
+  float power;
+   
   uint num;
+  char name[100];
   struct {
-    char name[76];
-    uint n[6];
-  } frame[num];
+    char name[40]; 
+    uint uvIndex; 
+    uint type; 
+  } texture[num];
 
-  char name4[44];
-  uint num;
-} MAT[num3] <optimize=false>;
+} material[matNum*grNum] <optimize=false>;
 
